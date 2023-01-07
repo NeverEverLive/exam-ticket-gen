@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, ForeignKeyConstraint, ForeignKey, PrimaryKeyConstraint, func
+from sqlalchemy import Column, ForeignKeyConstraint, PrimaryKeyConstraint, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.types import String
 from sqlalchemy.types import LargeBinary
@@ -14,7 +14,7 @@ class UserModel(BaseModel):
     __tablename__ = "user"
 
     id = Column(UUID(as_uuid=True), nullable=False, primary_key=True)
-    role_id = Column(ForeignKey("role.id"), nullable=False)
+    role_id = Column(UUID(as_uuid=True), nullable=False)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     patronymic = Column(String, nullable=True)
@@ -29,10 +29,22 @@ class UserModel(BaseModel):
         uselist=False
     )
 
+    questions = relationship(
+        "QuestionModel",
+        back_populates="user",
+        uselist=True
+    )
+
+    tickets = relationship(
+        "TicketModel",
+        back_populates="user",
+        uselist=True
+    )
+
     __table_args__ = (
         PrimaryKeyConstraint(id),
         ForeignKeyConstraint(
-            (id,),
+            (role_id,),
             ("role.id",)
         )
     )
