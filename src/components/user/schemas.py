@@ -39,6 +39,9 @@ class UserLogin(BaseModel):
 class UserSecure(BaseModel):
     id: uuid.UUID
     username: str
+    first_name: str
+    last_name: str
+    patronymic: str | None
 
     class Config:
         orm_mode = True
@@ -53,7 +56,7 @@ class UserResponse(BaseResponse):
 
 
 class UsersResponse(BaseResponse):
-    users: List[UserSecure]
+    users: List[UserSecure] = Field(default_factory=list)
 
     class Config:
         allow_population_by_field_name = True

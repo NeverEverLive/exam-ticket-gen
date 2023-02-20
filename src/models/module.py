@@ -21,8 +21,8 @@ class ModuleModel(BaseModel):
 
     questions = relationship(
         "QuestionModel",
-        secondary="question_module",
-        back_populates="modules",
+        back_populates="module",
+        uselist=True,
     )
 
     subject = relationship(

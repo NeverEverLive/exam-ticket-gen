@@ -8,6 +8,9 @@ from src import models
 from src.exceptions.authentication import AuthenticationException
 from src.views.health import router as health_router
 from src.views.user import router as user_router
+from src.views.subject import router as subject_router
+from src.views.module import router as module_router
+from src.views.question import router as question_router
 
 def create_app():
     app = FastAPI(title="Studing ticket", debug=False)
@@ -50,6 +53,24 @@ def create_app():
         user_router,
         prefix="/api",
         tags=["User"]
+    )
+
+    app.include_router(
+        subject_router,
+        prefix="/api",
+        tags=["Subject"]
+    )
+
+    app.include_router(
+        module_router,
+        prefix="/api",
+        tags=["Module"]
+    )
+
+    app.include_router(
+        question_router,
+        prefix="/api",
+        tags=["Question"]
     )
 
     return app

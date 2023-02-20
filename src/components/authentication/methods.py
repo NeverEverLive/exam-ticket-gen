@@ -63,29 +63,3 @@ def decode_jwt_token(token: str) -> tuple[bool, UUID]:
         raise TokenExpiredException(status_code=400, message="Signature expired. Please log in again.")
     except jwt.InvalidTokenError:
         raise InvalidTokenException(status_code=400, message="Invalid token. Please relogin")
-
-
-async def check(authorization: str = Header()):
-    if not authorization:
-        raise AuthenticationException(status_code=400, message="Authorization token doesn't exists.")
-
-    token_schema, token = authorization.split(" ")
-    valid_token_schemes = ["Bearer"]
-
-    if token_schema not in valid_token_schemes:
-        raise InvalidTokenException(status_code=401, message="Invalid token schema.")
-
-    if not token:
-        raise InvalidTokenException("Token not transferred")
-
-    is_valid, user_id = decode_jwt_token(token)
-    print(is_valid)
-    print(user_id)
-    if is_valid:
-        with get_session() as session:
-            user = session.query(UserModel).filter_by(id=user_id).first()
-            return UserSchema.from_orm(user)
-
-    raise TokenExpiredException(
-        status_code=401, message="Signature expired. Please log in again."
-    )

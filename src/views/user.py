@@ -9,44 +9,45 @@ from src.components.user.methods import update_user
 from src.components.user.methods import delete_user
 from src.components.user.methods import login_user
 from src.components.role.methods import create_role
-from src.components.authentication.methods import check as authorization
+from src.components.authentication.jwt import JWTBearer
+
 
 router = APIRouter(prefix="/user")
 
 
 @router.post("/", response_model=UserResponse, status_code=201)
 async def register_user_endpoint(user: UserSchema):
-    return create_user(user)
+    return await create_user(user)
 
 
-@router.get("/", response_model=UsersResponse, status_code=200)
+@router.get("/", response_model=UsersResponse, status_code=200, dependencies=[Depends(JWTBearer())])
 async def get_users_endpoint():
-    return get_users()
+    return await get_users()
 
 
 @router.post("/login", response_model=UserResponse, status_code=200)
 async def get_users_endpoint(user: UserLogin, response: Response):
-    user, token = login_user(user)
+    user, token = await login_user(user)
     response.headers["Authorization"] = token
     response.headers["Access-Control-Expose-Headers"] = "*"
     return user
 
 
-@router.get("/detail", response_model=UserResponse, status_code=200, dependencies=[Depends(authorization)])
-async def get_user_endpoint(user_id: str = Query(alias="id")):
-    return get_user(user_id)
+@router.get("/detail", response_model=UserResponse, status_code=200, dependencies=[Depends(JWTBearer())])
+async def get_user_endpoint(user_id: str = Query(alias="id", default=None)):
+    return await get_user(user_id)
 
 
-@router.put("/", response_model=UserResponse, status_code=200, dependencies=[Depends(authorization)])
+@router.put("/", response_model=UserResponse, status_code=200, dependencies=[Depends(JWTBearer())])
 async def get_user_endpoint(user: UserSchema):
-    return update_user(user)
+    return await update_user(user)
 
 
-@router.delete("/", response_model=UserResponse, status_code=202, dependencies=[Depends(authorization)])
+@router.delete("/", response_model=UserResponse, status_code=202, dependencies=[Depends(JWTBearer())])
 async def get_user_endpoint(user_id: str = Query(alias="id")):
-    return delete_user(user_id)
+    return await delete_user(user_id)
 
 
 @router.post("/role", response_model=RoleResponse, status_code=201)
 async def create_role_endpoint(user: RoleSchema):
-    return create_role(user)
+    return await create_role(user)

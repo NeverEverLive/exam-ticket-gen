@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  database:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: "ticket_db"
+      POSTGRES_USER: "ticket_user"
+      POSTGRES_PASSWORD: "5e703b00"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - .:/var/lib/postgresql/data
+    ports:
+      - target: 5432
+        published: 15432
+        # mode: host
+    command: postgres -c 'max_connections=500'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ticket_user -d ticket_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks: 
+      - backend
+
+  web:
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - target: 8000
+        published: 8000
+    links:
+      - database
+    healthcheck:
+      test: curl --fail http://localhost:8000/api/ || exit 1
+      interval: 5s
+      timeout: 5s
+      start_period: 20s
+      retries: 5
+    networks: 
+      - backend
+
+
+networks:
+  backend:

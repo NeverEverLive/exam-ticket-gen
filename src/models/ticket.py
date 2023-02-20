@@ -16,7 +16,6 @@ class TicketModel(BaseModel):
     id = Column(UUID(as_uuid=True), nullable=False, primary_key=True)
     user_id = Column(UUID(as_uuid=True), nullable=False)
     title = Column(String, nullable=False)
-    number = Column(Integer, nullable=False)
     inserted_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=datetime.datetime.now)
 
