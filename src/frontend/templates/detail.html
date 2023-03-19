@@ -1,0 +1,83 @@
+{% extends 'index.html' %}
+{% block content %}
+    <button type="button" class="btn btn-primary" onclick="location.href='/'">Back</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="position:absolute; right: 350px;">
+        Create Module
+    </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1" style="position:absolute; right: 220px;">
+        Gen ticket
+    </button>
+    <h1>Subject: {{ subject.name }}</h1>
+    <br>
+    <p>Description: {{ subject.description }}</p>
+    <p>Modules:</p>
+    {% for module in modules %}
+        <ul>
+            <li>
+                <a href=module/{{module.id}}>{{module.name}}</a>
+            </li>
+        </ul>   
+    {% endfor %} 
+    <p>Tickets:</p>
+    {% for ticket in tickets %}
+        <ul>
+            <li>
+                {{ticket.title}} <a href="/download_file/{{ticket.id}}">Download</a>
+            </li>
+        </ul>   
+    {% endfor %} 
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Create module</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/create_module", enctype="multipart/form-data">
+      
+
+                        <input type="hidden" name ="SubjectID" class="form-control mb-3" id="exampleFormControlTextarea1" rows="3" value={{subject.id}}>
+
+                  <label for="exampleInputTitle">Module title</label>
+                  <input type="text" name ="inputTitle" class="form-control mb-3" id="exampleInputTitle" required>
+
+                  <label for="exampleInputDescription">Module description</label>
+                  <textarea name ="inputDescription" class="form-control mb-3" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+                  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                </form>
+            </div>
+      
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel1">Gen ticket</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/generate_ticket/{{subject.id}}", enctype="multipart/form-data">
+      
+                  <label for="exampleInputTitle">Question count</label>
+                  <input type="text" name ="countInput" class="form-control mb-3" id="exampleInputTitle" required>
+
+                  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                </form>
+            </div>
+      
+          </div>
+        </div>
+    </div>
+
+      
+{% endblock %}

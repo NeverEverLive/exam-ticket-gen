@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy import Column, PrimaryKeyConstraint, func, ForeignKeyConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.types import String
-from sqlalchemy.types import Integer
+from sqlalchemy.types import Float
 from sqlalchemy.types import DateTime
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -17,7 +17,7 @@ class QuestionModel(BaseModel):
     module_id = Column(UUID(as_uuid=True), nullable=False)
     user_id = Column(UUID(as_uuid=True), nullable=False)
     text = Column(String, nullable=False)
-    probability = Column(Integer, nullable=False)
+    probability = Column(Float, nullable=False)
     inserted_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=datetime.datetime.now)
 

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="shortcut icon" href="#">
+    <title>Home page</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Exam Gen</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav">
+        {% if current_user %}
+          <li class="nav-item">
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <button onclick="window.location.href='/logout'" style="position:absolute; right: 150px; top: 10px;" type="button" class="btn btn-danger mx-4">Log out</button>
+              </div>
+          </li>
+        
+          <li class="nav-item">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-1">
+                <p style="position:absolute; right: 30px; top: 15px;">User: {{current_user.username}}</p>
+            </div>
+          </li>
+        {% else %}
+        <li class="nav-item">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button onclick="window.location.href='/register'" style="position:absolute; right: 150px; top: 10px;" type="button" class="btn btn-primary mx-4">Register</button>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="container mt-4">
+    {% block content %}
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="position:absolute; right: 350px;">
+        Create subject
+    </button>
+      <h1 class="mt-4">Subject</h1>
+      {% if subjects %}
+        {% for subject in subjects %}
+          <ul class="list-group mt-4">
+              <li class="list-group-item">
+                <b>{{subject.name}}</b>
+                Дата создания записи: {{subject.inserted_at}}
+                <br>
+                <span>{{ subject.description|safe|truncate(25) }}<a href="/detail/{{subject.id}}">more</a></span>
+                <br>
+              </li>
+          </ul>  
+        {% endfor %}
+      {% else %}
+        <h6 class="ml-3">No entries yet...</h6>
+      {% endif %}
+    {% endblock %}
+  </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create subject</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form method="POST" action="/create_subject", enctype="multipart/form-data">
+
+            <label for="exampleInputTitle">Subject title</label>
+            <input type="text" name ="inputTitle" class="form-control mb-3" id="exampleInputTitle" placeholder="Enter title" required>
+
+            <label for="exampleInputDescription">Description</label>
+            <textarea name ="inputDescription" class="form-control mb-3" id="exampleFormControlTextarea1" rows="3" placeholder="Enter description"></textarea>
+
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+          </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

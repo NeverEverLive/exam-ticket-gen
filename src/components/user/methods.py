@@ -21,7 +21,7 @@ async def create_user(user: UserSchema):
     async with get_async_session() as session:
         session.add(user_query)
         await session.commit()
-    
+
     return UserResponse(
         user=user,
         message="User successfully created",
@@ -112,15 +112,17 @@ async def login_user(user: UserSchema):
 
     async with get_async_session() as session:
         try: 
-            user_state = (await session.execute(user_state)).fetchone()
+            user_state = (await session.execute(user_state)).fetchone()[0]
         except IndexError:
             raise IndexError("This user doesn't exist")
+
+    logging.warning(user)
+    logging.warning(user_state)
 
     if not bcrypt.checkpw(user.hash_password, user_state.hash_password):
         raise ValueError('Неверный пароль')
 
     token = encode_jwt_token(user_state.id)
-
 
     return UserResponse(
         user=UserSecure.from_orm(user_state),

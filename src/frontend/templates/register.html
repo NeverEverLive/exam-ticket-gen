@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+{% block content %}
+    <h1>Create account</h1>
+    <div class="col-4">
+        <form id="login_form" action="/register_submit" method="post">
+            <label for="exampleInputTitle">Username</label>
+            <input type="text" name ="inputUsername" class="form-control mb-3" id="exampleInputTitle" placeholder="Enter you'r username" required>
+
+            <label for="exampleInputTitle">First name</label>
+            <input type="text" name ="inputFirstName" class="form-control mb-3" id="exampleInputTitle" placeholder="Enter you'r first name" required>
+
+            <label for="exampleInputTitle">Last name</label>
+            <input type="text" name ="inputLastName" class="form-control mb-3" id="exampleInputTitle" placeholder="Enter you'r last name" required>
+
+            <label for="exampleInputTitle">Patronymic</label>
+            <input type="text" name ="inputPatronymic" class="form-control mb-3" id="exampleInputTitle" placeholder="Enter you'r patronymic">
+
+            <label for="exampleInputTitle">Password</label>
+            <input type="password" name ="inputPassword" class="form-control mb-3" id="exampleInputTitle" placeholder="Enter you'r password" required>
+
+            <button form="login_form" type="submit" class="btn btn-primary mt-4">Create account</button>
+        </form>
+    </div>
+{% endblock %}

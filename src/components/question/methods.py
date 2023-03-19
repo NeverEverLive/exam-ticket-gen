@@ -1,4 +1,4 @@
-
+import uuid
 import logging
 from pydantic import parse_obj_as
 from sqlalchemy import select, update, delete
@@ -29,6 +29,26 @@ async def get_questions() -> QuestionsResponse:
         QuestionModel.user_id,
         QuestionModel.text,
         QuestionModel.probability,
+    )
+
+    async with get_async_session() as session:
+        logging.warning((await session.execute(question_state)).fetchall())
+        return QuestionsResponse(
+            questions=parse_obj_as(list[QuestionSchema], (await session.execute(question_state)).fetchall()),
+            message="Question collected successfully",
+            success=True
+        )
+    
+
+async def get_questions_by_module_id(module_id: uuid.UUID) -> QuestionsResponse:
+    question_state = select(
+        QuestionModel.id,
+        QuestionModel.module_id,
+        QuestionModel.user_id,
+        QuestionModel.text,
+        QuestionModel.probability,
+    ).where(
+        QuestionModel.module_id == module_id
     )
 
     async with get_async_session() as session:

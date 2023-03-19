@@ -1,5 +1,6 @@
 import uuid
 from pydantic import Field, BaseModel
+import datetime
 
 from src.components.base_response.schema import BaseResponse
 
@@ -12,6 +13,7 @@ class SubjectSchema(BaseModel):
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     name: str
     description: str | None
+    inserted_at: datetime.date | None
 
 
 class SubjectResponse(BaseResponse):

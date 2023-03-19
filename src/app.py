@@ -11,6 +11,8 @@ from src.views.user import router as user_router
 from src.views.subject import router as subject_router
 from src.views.module import router as module_router
 from src.views.question import router as question_router
+from src.views.ticket import router as ticket_router
+from src.main import router as main_router
 
 def create_app():
     app = FastAPI(title="Studing ticket", debug=False)
@@ -71,6 +73,18 @@ def create_app():
         question_router,
         prefix="/api",
         tags=["Question"]
+    )
+
+    app.include_router(
+        ticket_router,
+        prefix="/api",
+        tags=["Ticket"]
+    )
+
+    app.include_router(
+        main_router,
+        prefix="",
+        tags=["MAIN"]
     )
 
     return app

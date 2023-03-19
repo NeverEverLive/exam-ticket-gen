@@ -1,4 +1,3 @@
-
 import logging
 from pydantic import parse_obj_as
 from sqlalchemy import select, update, delete
@@ -26,6 +25,7 @@ async def get_subjects() -> SubjectsResponse:
         SubjectModel.id,
         SubjectModel.name,
         SubjectModel.description,
+        SubjectModel.inserted_at,
     )
 
     async with get_async_session() as session:
@@ -46,7 +46,6 @@ async def get_subject(id: str) -> SubjectResponse:
     )
 
     async with get_async_session() as session:
-        logging.warning(SubjectSchema.from_orm((await session.execute(subject_state)).fetchone()))
         return SubjectResponse(
             subject=SubjectSchema.from_orm((await session.execute(subject_state)).fetchone()),
             message="Subject successfully taken",

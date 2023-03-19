@@ -24,26 +24,26 @@ services:
     networks: 
       - backend
 
-  web:
-    build: .
-    env_file:
-      - .env
-    depends_on:
-      database:
-        condition: service_healthy
-    ports:
-      - target: 8000
-        published: 8000
-    links:
-      - database
-    healthcheck:
-      test: curl --fail http://localhost:8000/api/ || exit 1
-      interval: 5s
-      timeout: 5s
-      start_period: 20s
-      retries: 5
-    networks: 
-      - backend
+  # web:
+  #   build: .
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   ports:
+  #     - target: 8000
+  #       published: 8000
+  #   links:
+  #     - database
+  #   healthcheck:
+  #     test: curl --fail http://localhost:8000/api/ || exit 1
+  #     interval: 5s
+  #     timeout: 5s
+  #     start_period: 20s
+  #     retries: 5
+  #   networks: 
+  #     - backend
 
 
 networks:

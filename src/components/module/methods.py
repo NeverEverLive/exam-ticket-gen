@@ -1,4 +1,4 @@
-
+import uuid
 import logging
 from pydantic import parse_obj_as
 from sqlalchemy import select, update, delete
@@ -28,6 +28,24 @@ async def get_modules() -> ModulesResponse:
         ModuleModel.subject_id,
         ModuleModel.name,
         ModuleModel.description,
+    )
+
+    async with get_async_session() as session:
+        return ModulesResponse(
+            modules=parse_obj_as(list[ModuleSchema], (await session.execute(module_state)).fetchall()),
+            message="Module collected successfully",
+            success=True
+        )
+
+
+async def get_modules_by_subject_id(subject_id: uuid.UUID) -> ModulesResponse:
+    module_state = select(
+        ModuleModel.id,
+        ModuleModel.subject_id,
+        ModuleModel.name,
+        ModuleModel.description,
+    ).where(
+        ModuleModel.subject_id == subject_id
     )
 
     async with get_async_session() as session:

@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+{% block content %}
+    <button type="button" class="btn btn-primary" onclick="location.href='/'">Back</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="position:absolute; right: 350px;">
+        Create Question
+    </button>
+    <h1>Module: {{ module.name }}</h1>
+    <br>
+    <p>Description: {{ module.description }}</p>
+    <p>Questions:<p>
+    {% for question in questions %}
+        <ul>
+            <li>
+                {{question.text}}
+            </li>
+        </ul>   
+    {% endfor %} 
+        
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Create question</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/create_question", enctype="multipart/form-data">
+      
+                    <input type="hidden" name ="ModuleID" class="form-control mb-3" id="exampleFormControlTextarea1" rows="3" value={{module.id}}>
+
+                  <label for="exampleInputTitle">Question text</label>
+                  <input type="text" name ="inputTitle" class="form-control mb-3" id="exampleInputTitle" required>
+
+                  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                </form>
+            </div>
+      
+          </div>
+        </div>
+    </div>
+
+      
+{% endblock %}

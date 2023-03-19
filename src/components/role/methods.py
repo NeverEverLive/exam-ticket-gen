@@ -1,3 +1,6 @@
+import logging
+from sqlalchemy import select
+
 from src.models.role import RoleModel
 from src.components.role.schemas import RoleSchema
 from src.models.base import get_session
@@ -12,6 +15,19 @@ async def create_role(role: RoleSchema):
 
     return RoleResponse(
         role=role,
+        message="Role successfully created",
+        success=True
+        )
+
+async def get_role():
+    role_query = select(RoleModel)
+    with get_session() as session:
+        role = session.execute(role_query).first()
+
+    logging.warning(role)
+
+    return RoleResponse(
+        role=role[0],
         message="Role successfully created",
         success=True
         )
